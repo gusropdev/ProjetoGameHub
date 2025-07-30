@@ -1,0 +1,8 @@
+bin/
+obj/
+.vs/
+*.user
+*.db
+*.sqlite
+.idea/
+appsettings.Development/

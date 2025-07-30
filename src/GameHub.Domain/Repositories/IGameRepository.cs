@@ -5,13 +5,13 @@ namespace GameHub.Domain.Repositories;
 
 public interface IGameRepository
 {
-    Task<Game> GetGameByIdAsync(Guid gameId, CancellationToken cancellationToken = default);
-    Task<List<Game>> GetAllGamesAsync(CancellationToken cancellationToken = default);
-    Task<List<Game>> GetActiveGamesAsync(CancellationToken cancellationToken = default);
-    Task<List<Game>> GetGamesByGenreAsync(string genre, CancellationToken cancellationToken = default);
-    Task<List<Game>> GetGamesByPlatformAsync(string platform, CancellationToken cancellationToken = default);
-    Task<List<Game>> GetGamesByAgeRatingAsync(AgeRating ageRating, CancellationToken cancellationToken = default);
-    Task AddGameAsync(Game game, CancellationToken cancellationToken = default);
-    Task UpdateGameAsync(Game game, CancellationToken cancellationToken = default);
-    Task DeleteGameAsync(Guid gameId, CancellationToken cancellationToken = default);
+    Task<Game> GetByIdAsync(Guid gameId, CancellationToken cancellationToken = default);
+    Task<List<Game>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<List<Game>> GetActiveAsync(CancellationToken cancellationToken = default);
+    Task<List<Game>> GetByGenreAsync(string genre, CancellationToken cancellationToken = default);
+    Task<List<Game>> GetByPlatformAsync(string platform, CancellationToken cancellationToken = default);
+    Task<List<Game>> GetByAgeRatingAsync(AgeRating ageRating, CancellationToken cancellationToken = default);
+    Task AddAsync(Game game, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Game game, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid gameId, CancellationToken cancellationToken = default);
 }

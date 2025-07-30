@@ -13,5 +13,5 @@ public interface IGameRepository
     Task<List<Game>> GetByAgeRatingAsync(AgeRating ageRating, CancellationToken cancellationToken = default);
     Task AddAsync(Game game, CancellationToken cancellationToken = default);
     Task UpdateAsync(Game game, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Guid gameId, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Game game, CancellationToken cancellationToken = default);
 }

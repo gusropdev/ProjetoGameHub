@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mediatr.extensions.microsoft.dependencyinjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="microsoft.entityframeworkcore.design" Version="9.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="swashbuckle.aspnetcore" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameHub.Application\GameHub.Application.csproj" />
+    <ProjectReference Include="..\GameHub.Domain\GameHub.Domain.csproj" />
+    <ProjectReference Include="..\GameHub.Infrastructure\GameHub.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

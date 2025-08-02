@@ -1,6 +1,0 @@
-@GameHub.WebApi_HostAddress = http://localhost:5206
-
-GET {{GameHub.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

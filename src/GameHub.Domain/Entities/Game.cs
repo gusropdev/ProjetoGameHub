@@ -14,8 +14,8 @@ public class Game
     public DateTime ReleaseDate { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool IsActive { get; private set; }
-    
-    public AgeRating AgeRating { get; private set; }
+
+    public AgeRating AgeRating { get; private set; } = AgeRating.Everyone;
     
     private Game() { }
     
@@ -30,7 +30,7 @@ public class Game
         if (stockQuantity < 0)
             throw new ArgumentException("Stock quantity cannot be negative.", nameof(stockQuantity));
         
-        if (releaseDate < DateTime.Today)
+        if (releaseDate > DateTime.Today)
             throw new ArgumentException("Release date cannot be in the future.", nameof(releaseDate));
         
         Id = Guid.NewGuid();
@@ -48,11 +48,15 @@ public class Game
     
     public void Deactivate()
     {
+        if (!IsActive)
+            throw new InvalidOperationException("Game is already inactive.");
         IsActive = false;
     }
     
     public void Activate()
     {
+        if (IsActive)
+            throw new InvalidOperationException("Game is already active.");
         IsActive = true;
     }
     
@@ -98,12 +102,12 @@ public class Game
         Platform = string.IsNullOrWhiteSpace(newPlatform) ? string.Empty : newPlatform;
     }
     
-    public void UpdatePrice(decimal newPrice)
+    public void UpdateDailyRentalPrice(decimal newDailyRentalPrice)
     {
-        if (newPrice < 0)
-            throw new ArgumentException("Price cannot be negative.", nameof(newPrice));
+        if (newDailyRentalPrice < 0)
+            throw new ArgumentException("Price cannot be negative.", nameof(newDailyRentalPrice));
         
-        DailyRentalPrice = newPrice;
+        DailyRentalPrice = newDailyRentalPrice;
     }
     
     public void UpdateReleaseDate(DateTime newReleaseDate)

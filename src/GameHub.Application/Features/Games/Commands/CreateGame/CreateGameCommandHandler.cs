@@ -13,12 +13,12 @@ public class CreateGameCommandHandler (IGameRepository gameRepository, IUnitOfWo
         var game = new Game(
             request.Title,
             request.Description,
-            request.Genre,
-            request.Platform,
             request.DailyRentalPrice,
             request.StockQuantity,
             request.ReleaseDate,
-            request.AgeRating
+            request.AgeRating,
+            request.Genre,
+            request.Platform
         );
         
         await gameRepository.AddAsync(game, cancellationToken);

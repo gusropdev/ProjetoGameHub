@@ -3,7 +3,4 @@ using MediatR;
 
 namespace GameHub.Application.Features.Games.Queries.GetGameById;
 
-public class GetGameByIdQuery : IRequest<GameDto>
-{
-    public Guid Id { get; set; }
-}
+public record GetGameByIdQuery (Guid GameId): IRequest<GameDto>;

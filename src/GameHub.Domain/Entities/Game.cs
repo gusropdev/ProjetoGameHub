@@ -7,8 +7,6 @@ public class Game
     public Guid Id { get; private set; }
     public string Title { get; private set; }
     public string Description { get; private set; }
-    public string Genre { get; private set; }
-    public string Platform { get; private set; }
     public decimal DailyRentalPrice { get; private set; }
     public int StockQuantity { get; private set; }
     public DateTime ReleaseDate { get; private set; }
@@ -16,10 +14,20 @@ public class Game
     public bool IsActive { get; private set; }
 
     public AgeRating AgeRating { get; private set; } = AgeRating.Everyone;
+    public Genre Genre { get; private set; } = Genre.Other;
+    public Platform Platform { get; private set; } = Platform.Other;
     
     private Game() { }
     
-    public Game(string title, string description, string genre, string platform, decimal dailyRentalPrice, int stockQuantity, DateTime releaseDate, AgeRating ageRating)
+    public Game(
+        string title,
+        string description,
+        decimal dailyRentalPrice,
+        int stockQuantity,
+        DateTime releaseDate,
+        AgeRating ageRating,
+        Genre genre,
+        Platform platform)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title cannot be empty.", nameof(title));
@@ -30,20 +38,20 @@ public class Game
         if (stockQuantity < 0)
             throw new ArgumentException("Stock quantity cannot be negative.", nameof(stockQuantity));
         
-        if (releaseDate > DateTime.Today)
+        if (releaseDate >  DateTime.Today)
             throw new ArgumentException("Release date cannot be in the future.", nameof(releaseDate));
         
         Id = Guid.NewGuid();
         Title = title;
         Description = string.IsNullOrWhiteSpace(description) ? string.Empty : description;
-        Genre = string.IsNullOrWhiteSpace(genre) ? string.Empty : genre;
-        Platform = string.IsNullOrWhiteSpace(platform) ? string.Empty : platform;
         DailyRentalPrice = dailyRentalPrice;
         StockQuantity = stockQuantity;
         ReleaseDate = releaseDate;
-        AgeRating = ageRating;
         CreatedAt = DateTime.UtcNow;
         IsActive = true; // Default to active when created
+        AgeRating = ageRating;
+        Genre = genre;
+        Platform = platform;
     }
     
     public void Deactivate()
@@ -91,16 +99,6 @@ public class Game
     {
         Description = string.IsNullOrWhiteSpace(newDescription) ? string.Empty : newDescription;
     }
-
-    public void UpdateGenre(string newGenre)
-    {
-        Genre = string.IsNullOrWhiteSpace(newGenre) ? string.Empty : newGenre;
-    }
-
-    public void UpdatePlatform(string newPlatform)
-    {
-        Platform = string.IsNullOrWhiteSpace(newPlatform) ? string.Empty : newPlatform;
-    }
     
     public void UpdateDailyRentalPrice(decimal newDailyRentalPrice)
     {
@@ -122,5 +120,14 @@ public class Game
     {
         AgeRating = newAgeRating;
     }
+
+    public void UpdateGenre(Genre newGenre)
+    {
+        Genre = newGenre;
+    }
     
+    public void UpdatePlatform(Platform newPlatform)
+    {
+        Platform = newPlatform;
+    }
 }

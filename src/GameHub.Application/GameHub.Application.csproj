@@ -10,6 +10,13 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+    <Folder Include="Features\Games\Queries\GetGameByPlatform\" />
+    <Folder Include="Features\Games\Queries\GetInactiveGames\" />
+    <Folder Include="Features\Games\Queries\GeyGameByGenre\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -8,7 +8,7 @@ public class ActivateGameCommandHandler (IGameRepository gameRepository, IUnitOf
 {
     public async Task<bool> Handle(ActivateGameCommand request, CancellationToken cancellationToken)
     {
-        var game = await gameRepository.GetByIdAsync(request.GameId, cancellationToken);
+        var game = await gameRepository.GetByIdAsync(request.Id, cancellationToken);
         if (game == null)
         {
             return false; // Game not found

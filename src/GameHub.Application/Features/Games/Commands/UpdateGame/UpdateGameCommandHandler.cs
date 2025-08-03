@@ -8,7 +8,7 @@ public class UpdateGameCommandHandler (IGameRepository gameRepository, IUnitOfWo
 {
     public async Task<bool> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
     {
-        var game = await gameRepository.GetByIdAsync(request.GameId, cancellationToken);
+        var game = await gameRepository.GetByIdAsync(request.Id, cancellationToken);
         if (game == null)
         {
             return false; // Game not found

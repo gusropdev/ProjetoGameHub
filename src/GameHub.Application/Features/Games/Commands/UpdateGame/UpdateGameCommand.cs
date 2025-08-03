@@ -4,7 +4,7 @@ using MediatR;
 namespace GameHub.Application.Features.Games.Commands.UpdateGame;
 
 public record UpdateGameCommand(
-    Guid GameId,
+    Guid Id,
     string Title,
     string Description,
     decimal DailyRentalPrice,

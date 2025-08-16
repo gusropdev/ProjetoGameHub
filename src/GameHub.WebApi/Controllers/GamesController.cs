@@ -22,11 +22,23 @@ public class GamesController (IMediator mediator) : ControllerBase
         return Ok("O roteamento para GamesController está funcionando!");
     }
     
-    [HttpPost("create")]
-    public async Task<ActionResult> CreateAsync([FromBody] CreateGameCommand command)
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateGameCommand command)
     {
         var result = await mediator.Send(command);
-        return Ok(result);
+        
+        if (result.IsSuccess == false)
+        {
+            return result.ErrorType switch
+            {
+                ErrorType.NotFound => NotFound(result.Errors),
+                ErrorType.Conflict => Conflict(result.Errors),
+                ErrorType.Validation => BadRequest(result.Errors),
+                _ => BadRequest(result.Errors)
+            };
+        }
+
+        return CreatedAtAction("GetById", new { id = result.Value }, result.Value);
     }
     [HttpGet]
     public async Task<ActionResult> GetAllAsync()
@@ -36,7 +48,7 @@ public class GamesController (IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "GetGameById")]
     public async Task<ActionResult> GetByIdAsync(Guid id)
     {
         var query = new GetGameByIdQuery(id);
@@ -44,7 +56,7 @@ public class GamesController (IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("agerRating/{ageRating}")]
+    [HttpGet("ageRating/{ageRating}")]
     public async Task<ActionResult> GetByAgeRatingAsync(AgeRating ageRating) 
     {
         var query = new GetGameByAgeRatingQuery(ageRating);
@@ -86,6 +98,17 @@ public class GamesController (IMediator mediator) : ControllerBase
         var command = new DeleteGameCommand(id);
         var result = await mediator.Send(command);
         
-        return result ? Ok() : NotFound();
+        if (result.IsSuccess == false)
+        {
+            return result.ErrorType switch
+            {
+                ErrorType.NotFound => NotFound(result.Errors),
+                ErrorType.Conflict => Conflict(result.Errors),
+                ErrorType.Validation => BadRequest(result.Errors),
+                _ => BadRequest(result.Errors)
+            };
+        }
+
+        return NoContent();
     }
 }

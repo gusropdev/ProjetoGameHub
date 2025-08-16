@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using GameHub.Application;
 using GameHub.Infrastructure;
 using GameHub.WebApi.Common;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,3 +1,5 @@
+using GameHub.Application.Common;
+using GameHub.Application.Common.Responses;
 using GameHub.Domain.Enums;
 using MediatR;
 
@@ -12,4 +14,4 @@ public record CreateGameCommand (
     AgeRating AgeRating,
     Genre Genre,
     Platform Platform
-    ): IRequest<Guid>;
+    ): IRequest<Result<Guid>>;

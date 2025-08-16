@@ -7,7 +7,8 @@ namespace GameHub.Infrastructure.Persistence;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Game> Games { get; set; } = null!;
-
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Rental> Rentals { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

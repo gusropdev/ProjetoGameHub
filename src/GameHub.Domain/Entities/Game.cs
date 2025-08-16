@@ -5,8 +5,8 @@ namespace GameHub.Domain.Entities;
 public class Game
 {
     public Guid Id { get; private set; }
-    public string Title { get; private set; }
-    public string Description { get; private set; }
+    public string Title { get; private set; } = null!;
+    public string? Description { get; private set; }
     public decimal DailyRentalPrice { get; private set; }
     public int StockQuantity { get; private set; }
     public DateTime ReleaseDate { get; private set; }
@@ -16,6 +16,8 @@ public class Game
     public AgeRating AgeRating { get; private set; } = AgeRating.Everyone;
     public Genre Genre { get; private set; } = Genre.Other;
     public Platform Platform { get; private set; } = Platform.Other;
+    
+    public List<Rental> Rentals { get; private set; } = null!;
     
     private Game() { }
     
@@ -52,6 +54,7 @@ public class Game
         AgeRating = ageRating;
         Genre = genre;
         Platform = platform;
+        Rentals = [];
     }
     
     public void Deactivate()

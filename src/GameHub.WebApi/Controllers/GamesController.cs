@@ -7,6 +7,7 @@ using GameHub.Application.Features.Games.Queries.GetGameByGenre;
 using GameHub.Application.Features.Games.Queries.GetGameById;
 using GameHub.Application.Features.Games.Queries.GetGameByPlatform;
 using GameHub.Domain.Enums;
+using GameHub.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,19 +30,13 @@ public class GamesController (IMediator mediator) : ControllerBase
         
         if (result.IsSuccess == false)
         {
-            return result.ErrorType switch
-            {
-                ErrorType.NotFound => NotFound(result.Errors),
-                ErrorType.Conflict => Conflict(result.Errors),
-                ErrorType.Validation => BadRequest(result.Errors),
-                _ => BadRequest(result.Errors)
-            };
+            return result.ToActionResult(this);
         }
 
         return CreatedAtAction("GetById", new { id = result.Value }, result.Value);
     }
     [HttpGet]
-    public async Task<ActionResult> GetAllAsync()
+    public async Task<IActionResult> GetAllAsync()
     {
         var query = new GetAllGamesQuery();
         var result = await mediator.Send(query);
@@ -49,7 +44,7 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "GetGameById")]
-    public async Task<ActionResult> GetByIdAsync(Guid id)
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         var query = new GetGameByIdQuery(id);
         var result = await mediator.Send(query);
@@ -57,7 +52,7 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpGet("ageRating/{ageRating}")]
-    public async Task<ActionResult> GetByAgeRatingAsync(AgeRating ageRating) 
+    public async Task<IActionResult> GetByAgeRatingAsync(AgeRating ageRating) 
     {
         var query = new GetGameByAgeRatingQuery(ageRating);
         var result = await mediator.Send(query);
@@ -65,7 +60,7 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpGet("genre/{genre}")]
-    public async Task<ActionResult> GetByGenreAsync(Genre genre)
+    public async Task<IActionResult> GetByGenreAsync(Genre genre)
     {
         var query = new GetGameByGenreQuery(genre);
         var result = await mediator.Send(query);
@@ -73,7 +68,7 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpGet("platform/{platform}")]
-    public async Task<ActionResult> GetByPlatformAsync(Platform platform)
+    public async Task<IActionResult> GetByPlatformAsync(Platform platform)
     {
         var query = new GetGameByPlatformQuery(platform);
         var result = await mediator.Send(query);
@@ -81,7 +76,7 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateGameCommand command)
+    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateGameCommand command)
     {
         if(id != command.Id)
         {
@@ -93,22 +88,10 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> DeleteAsync(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        var command = new DeleteGameCommand(id);
-        var result = await mediator.Send(command);
-        
-        if (result.IsSuccess == false)
-        {
-            return result.ErrorType switch
-            {
-                ErrorType.NotFound => NotFound(result.Errors),
-                ErrorType.Conflict => Conflict(result.Errors),
-                ErrorType.Validation => BadRequest(result.Errors),
-                _ => BadRequest(result.Errors)
-            };
-        }
+        var result = await mediator.Send(new DeleteGameCommand(id));
 
-        return NoContent();
+        return result.ToActionResult(this);
     }
 }

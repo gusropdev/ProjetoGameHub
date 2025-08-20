@@ -1,4 +1,4 @@
-namespace GameHub.WebApi.Common;
+namespace GameHub.WebApi.Extensions;
 
 public static class AppExtension
 {

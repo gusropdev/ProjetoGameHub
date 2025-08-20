@@ -76,15 +76,22 @@ public class GamesController (IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateGameCommand command)
+    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateGameRequest request)
     {
-        if(id != command.Id)
-        {
-            return BadRequest($"Game ID in the URL does not match the Game ID in the command.{id} != {command.Id}");
-        }
+        var command = new UpdateGameCommand(
+            id,
+            request.Title,
+            request.Description,
+            request.DailyRentalPrice,
+            request.ReleaseDate,
+            request.AgeRating,
+            request.Genre,
+            request.Platform
+        );
+
         var result = await mediator.Send(command);
-        
-        return result ? Ok() : NotFound();
+
+        return result.ToActionResult(this);
     }
 
     [HttpDelete("{id:guid}")]

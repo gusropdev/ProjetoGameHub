@@ -1,17 +1,30 @@
+using FluentValidation;
+using GameHub.Application.Common.Responses;
+using GameHub.Domain.Enums;
 using GameHub.Domain.Repositories;
 using MediatR;
 
 namespace GameHub.Application.Features.Games.Commands.UpdateGame;
 
-public class UpdateGameCommandHandler (IGameRepository gameRepository, IUnitOfWork unitOfWork) 
-    : IRequestHandler<UpdateGameCommand, bool>
+public class UpdateGameCommandHandler (IGameRepository gameRepository, IValidator<UpdateGameCommand> validator, IUnitOfWork unitOfWork)
+    : IRequestHandler<UpdateGameCommand, Result>
 {
-    public async Task<bool> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var errorMessages = validationResult.Errors
+                .Select(error => error.ErrorMessage)
+                .ToList();
+            
+            return Result.Failure(errorMessages, ErrorType.Validation);
+        }
+        
         var game = await gameRepository.GetByIdAsync(request.Id, cancellationToken);
         if (game == null)
         {
-            return false; // Game not found
+            return Result.Failure("Game not found.", ErrorType.NotFound); // Game not found
         }
         
         game.UpdateTitle(request.Title);
@@ -24,6 +37,6 @@ public class UpdateGameCommandHandler (IGameRepository gameRepository, IUnitOfWo
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return true; // Update successful
+        return Result.Success(); // Update successful
     }
 }

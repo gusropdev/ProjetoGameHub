@@ -1,3 +1,5 @@
+using FluentValidation;
+using GameHub.Application.Common.Responses;
 using GameHub.Application.DTOs;
 using GameHub.Application.Mapping;
 using GameHub.Domain.Enums;
@@ -6,13 +8,38 @@ using MediatR;
 
 namespace GameHub.Application.Features.Games.Queries.GetGameByPlatform;
 
-public class GetGameByPlatformQueryHandler (IGameRepository gameRepository)
-    : IRequestHandler<GetGameByPlatformQuery, IEnumerable<GameDto>>
+public class GetGameByPlatformQueryHandler (IGameRepository gameRepository, IValidator<GetGameByPlatformQuery> validator)
+    : IRequestHandler<GetGameByPlatformQuery, PagedResult<GameDto>>
 {
-    public async Task<IEnumerable<GameDto>> Handle(GetGameByPlatformQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<GameDto>> Handle(GetGameByPlatformQuery request, CancellationToken cancellationToken)
     {
-        var games = await gameRepository.GetByPlatformAsync(request.GamePlatform, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var errorMessages = validationResult.Errors
+                .Select(x => x.ErrorMessage)
+                .ToList();
+            return PagedResult<GameDto>.Failure(errorMessages, ErrorType.Validation);
+        }
+        
+        var games = await gameRepository.GetByPlatformAsync(request.Platform, cancellationToken);
+        var totalCount = games.Count;
+        
+        if (totalCount == 0)
+        {
+            return PagedResult<GameDto>.Failure("No games found for the specified platform.", ErrorType.NotFound);
+        }
 
-        return games.Select(game => game.MapToDto());
+        var pagedGames = games
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(g => g.MapToDto())
+            .ToList();
+        
+        return PagedResult<GameDto>.Success(
+            pagedGames,
+            totalCount,
+            request.PageNumber,
+            request.PageSize);
     }
 }

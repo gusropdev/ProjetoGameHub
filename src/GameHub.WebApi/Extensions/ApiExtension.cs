@@ -19,7 +19,7 @@ public static class ApiExtension
     {
         if (result.IsSuccess)
         {
-            return controller.Ok(result.Value);
+            return controller.Ok(result.Data);
         }
         return HandleFailure(result.ErrorType, result.Errors, controller);
     }

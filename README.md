@@ -104,7 +104,7 @@ GameHub/
         ```bash
          dotnet run
 
-🌐 Acessando a API
+🌐 **Acessando a API**
 
 - API disponível em: https://localhost:PORTA
 
@@ -120,4 +120,5 @@ GameHub/
 ## 📜 Licença
 
 Projeto de uso livre para fins de estudo e prática.
+
 

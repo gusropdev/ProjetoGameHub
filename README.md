@@ -1,7 +1,7 @@
 # 🎮 GameHub – API de Locadora de Jogos
 
-GameHub é uma API RESTful desenvolvida em **.NET 9**, projetada para gerenciar o catálogo e as locações de jogos em uma locadora.  
-O projeto segue os princípios de **Clean Architecture**, buscando uma separação clara de responsabilidades, aplicação de boas práticas de DDD e uso de padrões modernos de desenvolvimento backend.
+GameHub é uma API RESTful desenvolvida em **.NET 9**, projetada para gerenciar o catálogo de jogos digitais e suas modalidades de acesso.
+A aplicação simula uma plataforma de distribuição e assinatura de jogos, permitindo que usuários possam comprar, alugar por tempo limitado ou acessar via planos de assinatura.
 
 ## 📌 Objetivo
 
@@ -113,6 +113,8 @@ GameHub/
 ## 🔨 Próximos Passos
 [ ] Implementar sistema de autenticação e autorização com JWT.
 
+[ ] Implementar compras e planos de assinatura
+
 [ ] Concluir o CRUD para as entidades User e Rental.
 
 [ ] Adicionar testes de unidade e integração.
@@ -120,6 +122,7 @@ GameHub/
 ## 📜 Licença
 
 Projeto de uso livre para fins de estudo e prática.
+
 
 
 

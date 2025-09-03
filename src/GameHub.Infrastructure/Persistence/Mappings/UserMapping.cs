@@ -19,6 +19,7 @@ public class UserMapping : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Email)
             .HasColumnType("NVARCHAR")
+            .HasMaxLength(255)
             .IsRequired();
         
         builder.Property(u => u.PhoneNumber)
@@ -28,7 +29,5 @@ public class UserMapping : IEntityTypeConfiguration<User>
         builder.Property(u => u.CreatedAt)
             .HasColumnType("DATETIME")
             .IsRequired();
-        
-        
     }
 }

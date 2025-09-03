@@ -15,12 +15,14 @@ using GameHub.Application.Features.Games.Queries.GetInactiveGames;
 using GameHub.Domain.Enums;
 using GameHub.WebApi.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameHub.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "User")]
 public class GamesController (IMediator mediator) : ControllerBase
 {
     [HttpGet]

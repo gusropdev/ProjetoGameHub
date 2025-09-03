@@ -1,4 +1,6 @@
+using GameHub.Application.Common.Interfaces;
 using GameHub.Domain.Repositories;
+using GameHub.Infrastructure.Authentication;
 using GameHub.Infrastructure.Persistence;
 using GameHub.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,8 @@ public static class DependencyInjection
 
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;
     }

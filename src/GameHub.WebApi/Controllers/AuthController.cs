@@ -18,7 +18,7 @@ public class AuthController (IMediator mediator): ControllerBase
         {
             return result.ToActionResult(this);
         }
-        return Ok(result);
+        return NoContent();
     }
 
     [HttpPost("login")]

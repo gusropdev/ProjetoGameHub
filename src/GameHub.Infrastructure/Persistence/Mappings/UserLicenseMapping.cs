@@ -1,36 +1,28 @@
+using System.Diagnostics;
 using GameHub.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameHub.Infrastructure.Persistence.Mappings;
 
-public class RentalMapping : IEntityTypeConfiguration<UserLicense>
+public class UserLicenseMapping : IEntityTypeConfiguration<UserLicense>
 {
     public void Configure(EntityTypeBuilder<UserLicense> builder)
     {
-        builder.ToTable("Rentals");
+        builder.ToTable("UserLicenses");
 
         builder.HasKey(r => r.Id);
 
-        builder.Property(r => r.CreatedAt)
+        builder.Property(r => r.ActivatedAt)
             .HasColumnType("DATETIME")
             .IsRequired();
         
-        builder.Property(r => r.DueDate)
+        builder.Property(r => r.ExpiresAt)
             .HasColumnType("DATETIME")
             .IsRequired();
-
-        builder.Property(r => r.ReturnDate)
-            .HasColumnType("DATETIME")
-            .IsRequired(false);
-        
-        builder.Property(r => r.TotalRentalPrice)
-            .IsRequired()
-            .HasPrecision(19, 4)
-            .HasColumnType("SMALLMONEY");
 
         builder.HasOne(r => r.User)
-            .WithMany(u => u.Rentals)
+            .WithMany(u => u.UserLicenses)
             .HasForeignKey(r => r.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 

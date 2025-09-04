@@ -8,28 +8,26 @@ public class Game
     public string Title { get; private set; } = null!;
     public string? Description { get; private set; }
     public decimal DailyRentalPrice { get; private set; }
-    public int StockQuantity { get; private set; }
+    public decimal PurchasePrice { get; private set; }
     public DateTime ReleaseDate { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool IsActive { get; private set; }
 
     public AgeRating AgeRating { get; private set; } = AgeRating.Everyone;
-    public Genre Genre { get; private set; } = Genre.Other;
-    public Platform Platform { get; private set; } = Platform.Other;
+    public ICollection<Genre> Genres { get; private set; }
+    public ICollection<Platform> Platforms { get; private set; }
     
-    public List<Rental> Rentals { get; private set; } = null!;
+    public ICollection<UserLicense> UserLicenses { get; private set; }
     
     private Game() { }
     
     public Game(
         string title,
         string description,
+        decimal purchasePrice,
         decimal dailyRentalPrice,
-        int stockQuantity,
         DateTime releaseDate,
-        AgeRating ageRating,
-        Genre genre,
-        Platform platform)
+        AgeRating ageRating)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title cannot be empty.", nameof(title));
@@ -37,24 +35,24 @@ public class Game
         if (dailyRentalPrice < 0)
             throw new ArgumentException("Daily rental price cannot be negative.", nameof(dailyRentalPrice));
         
-        if (stockQuantity < 0)
-            throw new ArgumentException("Stock quantity cannot be negative.", nameof(stockQuantity));
+        if(purchasePrice < 0)
+            throw new ArgumentException("Purchase price cannot be negative.", nameof(purchasePrice));
         
-        if (releaseDate >  DateTime.Today)
+        if (releaseDate > DateTime.Today)
             throw new ArgumentException("Release date cannot be in the future.", nameof(releaseDate));
         
         Id = Guid.NewGuid();
         Title = title;
         Description = string.IsNullOrWhiteSpace(description) ? string.Empty : description;
         DailyRentalPrice = dailyRentalPrice;
-        StockQuantity = stockQuantity;
+        PurchasePrice = purchasePrice;
         ReleaseDate = releaseDate;
         CreatedAt = DateTime.UtcNow;
         IsActive = true; // Default to active when created
         AgeRating = ageRating;
-        Genre = genre;
-        Platform = platform;
-        Rentals = [];
+        UserLicenses = [];
+        Genres = [];
+        Platforms = [];
     }
     
     public void Deactivate()
@@ -70,24 +68,17 @@ public class Game
             throw new InvalidOperationException("Game is already active.");
         IsActive = true;
     }
-    
-    public void AddStock(int quantity)
+
+    public void AddGenres(IEnumerable<Genre> genres)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
-        
-        StockQuantity += quantity;
+        foreach (var genre in genres)
+            Genres.Add(genre);
     }
-    
-    public void RemoveStock(int quantity)
+
+    public void AddPlatforms(IEnumerable<Platform> platforms)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
-        
-        if (quantity > StockQuantity)
-            throw new InvalidOperationException("Insufficient stock to remove the specified quantity.");
-        
-        StockQuantity -= quantity;
+        foreach (var platform in platforms)
+            Platforms.Add(platform);
     }
     
     public void UpdateTitle(string newTitle)
@@ -110,6 +101,14 @@ public class Game
         
         DailyRentalPrice = newDailyRentalPrice;
     }
+
+    public void UpdatePurchasePrice(decimal newPurchasePrice)
+    {
+        if (newPurchasePrice < 0)
+            throw new ArgumentException("Price cannot be negative.", nameof(newPurchasePrice));
+        
+        PurchasePrice = newPurchasePrice;
+    }
     
     public void UpdateReleaseDate(DateTime newReleaseDate)
     {
@@ -123,14 +122,17 @@ public class Game
     {
         AgeRating = newAgeRating;
     }
-
-    public void UpdateGenre(Genre newGenre)
-    {
-        Genre = newGenre;
-    }
     
-    public void UpdatePlatform(Platform newPlatform)
+    public void UpdateGenres(ICollection<Genre> newGenres)
     {
-        Platform = newPlatform;
+        Genres.Clear();
+        foreach (var genre in newGenres)
+            Genres.Add(genre);
+    }
+    public void UpdatePlatforms(ICollection<Platform> newPlatforms)
+    {
+        Platforms.Clear();
+        foreach (var platform in newPlatforms)
+            Platforms.Add(platform);
     }
 }

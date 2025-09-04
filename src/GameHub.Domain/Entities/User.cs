@@ -13,8 +13,7 @@ public class User
     public bool IsActive { get; private set; }
     
     public Role Role { get; set; }
-    public List<Rental> Rentals { get; private set; } = null!;
-
+    public ICollection<UserLicense> UserLicenses { get; private set; }
     private User(){ }
 
     public User(string fullName, string email, string? phoneNumber, Role role)
@@ -27,7 +26,7 @@ public class User
         IsActive = true; // Default to active when created
         Role = role;
         PasswordHash = string.Empty;
-        Rentals = [];
+        UserLicenses = [];
     }
 
     public void SetPassword(string password)

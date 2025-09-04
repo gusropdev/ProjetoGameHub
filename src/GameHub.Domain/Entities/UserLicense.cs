@@ -1,36 +1,49 @@
+using GameHub.Domain.Enums;
+
 namespace GameHub.Domain.Entities;
 
-public class Rental
+public class UserLicense
 {
     public Guid Id { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime DueDate { get; private set; }
-    public DateTime? ReturnDate { get; private set; }
-    public decimal TotalRentalPrice { get; private set; }
-    
     public Guid UserId { get; private set; }
     public Guid GameId { get; private set; }
+    
+    public DateTime ActivatedAt { get; private set; }
+    public DateTime? ExpiresAt { get; private set; }
+    public LicenseType LicenseType { get; private set; } 
 
     public User User { get; private set; } = null!;
     public Game Game { get; private set; } = null!;
     
-    private Rental() { } 
+    private UserLicense() { } 
     
-    public Rental(Guid userId, Guid gameId, DateTime dueDate, decimal totalRentalPrice)
+    private UserLicense(Guid userId, Guid gameId, int accessDurationInDays)
     {
-        if (dueDate <= DateTime.UtcNow)
-            throw new ArgumentException("Due date must be in the future.", nameof(dueDate));
-        
-        if (totalRentalPrice < 0)
-            throw new ArgumentException("Rental price cannot be negative.", nameof(totalRentalPrice));
+        if (accessDurationInDays <= 0)
+            throw new ArgumentException("Access duration must be 1 day or more.", nameof(accessDurationInDays));
         
         Id = Guid.NewGuid();
-
-        CreatedAt = DateTime.UtcNow;
-        DueDate = dueDate;
-        ReturnDate = null;
-        TotalRentalPrice = totalRentalPrice;
+        ActivatedAt = DateTime.UtcNow;
+        ExpiresAt = DateTime.UtcNow.AddDays(accessDurationInDays);
+        LicenseType = LicenseType.Rental;
         UserId = userId;
         GameId = gameId;
     }
+    
+    private UserLicense(Guid userId, Guid gameId)
+    {
+        Id = Guid.NewGuid();
+        ActivatedAt = DateTime.UtcNow;
+        ExpiresAt = null;
+        LicenseType = LicenseType.Purchase;
+        UserId = userId;
+        GameId = gameId;
+    }
+    
+    public static UserLicense CreateRental(Guid userId, Guid gameId, int accessDurationInDays)
+        => new UserLicense(userId, gameId, accessDurationInDays);
+
+    public static UserLicense CreatePurchase(Guid userId, Guid gameId)
+        => new UserLicense(userId, gameId);
+
 }

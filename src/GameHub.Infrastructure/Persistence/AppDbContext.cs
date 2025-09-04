@@ -8,7 +8,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Game> Games { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
-    public DbSet<Rental> Rentals { get; set; } = null!;
+    public DbSet<UserLicense> UserLicenses { get; set; } = null!;
+    public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<Platform> Platforms { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

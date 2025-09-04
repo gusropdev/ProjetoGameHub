@@ -22,7 +22,7 @@ public class GetGameByPlatformQueryHandler (IGameRepository gameRepository, IVal
             return PagedResult<GameDto>.Failure(errorMessages, ErrorType.Validation);
         }
         
-        var games = await gameRepository.GetByPlatformAsync(request.Platform, cancellationToken);
+        var games = await gameRepository.GetByPlatformAsync(request.PlatformId, cancellationToken);
         var totalCount = games.Count;
         
         if (totalCount == 0)

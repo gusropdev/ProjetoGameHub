@@ -21,17 +21,10 @@ public class CreateGameCommandValidator : AbstractValidator<CreateGameCommand>
         RuleFor(x => x.DailyRentalPrice)
             .GreaterThanOrEqualTo(0).WithMessage("Daily rental price must be zero or greater.");
         
-        RuleFor(x => x.StockQuantity)
-            .GreaterThanOrEqualTo(0).WithMessage("Stock quantity must be zero or greater.");
+        RuleFor(x => x.PurchasePrice)
+            .GreaterThanOrEqualTo(0).WithMessage("Purchase price must be zero or greater.");
         
         RuleFor(x => x.AgeRating)
             .IsInEnum().WithMessage("Invalid age rating specified.");
-        
-        RuleFor(x => x.Genre)
-            .IsInEnum().WithMessage("Invalid genre specified.");
-        
-        RuleFor(x => x.Platform)
-            .IsInEnum().WithMessage("Invalid platform specified.");
-
     }
 }

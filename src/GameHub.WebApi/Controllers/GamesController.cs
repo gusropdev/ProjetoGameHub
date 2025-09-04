@@ -1,16 +1,12 @@
 using GameHub.Application.Features.Games.Commands.ActivateGame;
-using GameHub.Application.Features.Games.Commands.AddStockGame;
 using GameHub.Application.Features.Games.Commands.CreateGame;
 using GameHub.Application.Features.Games.Commands.DeactivateGame;
 using GameHub.Application.Features.Games.Commands.DeleteGame;
-using GameHub.Application.Features.Games.Commands.RemoveStockGame;
 using GameHub.Application.Features.Games.Commands.UpdateGame;
 using GameHub.Application.Features.Games.Queries.GetActiveGames;
 using GameHub.Application.Features.Games.Queries.GetAllGames;
 using GameHub.Application.Features.Games.Queries.GetGameByAgeRating;
-using GameHub.Application.Features.Games.Queries.GetGameByGenre;
 using GameHub.Application.Features.Games.Queries.GetGameById;
-using GameHub.Application.Features.Games.Queries.GetGameByPlatform;
 using GameHub.Application.Features.Games.Queries.GetInactiveGames;
 using GameHub.Domain.Enums;
 using GameHub.WebApi.Extensions;
@@ -22,7 +18,7 @@ namespace GameHub.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "User")]
+// [Authorize(Roles = "User")]
 public class GamesController (IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -93,33 +89,33 @@ public class GamesController (IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Genre/{genre}")]
-    public async Task<IActionResult> GetByGenreAsync(Genre genre, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-    {
-        var query = new GetGameByGenreQuery(genre);
-        var result = await mediator.Send(query);
-        
-        if (result.IsSuccess == false)
-        {
-            return result.ToActionResult(this);
-        }
-        
-        return Ok(result);
-    }
+    // [HttpGet("Genre/{genre}")]
+    // public async Task<IActionResult> GetByGenreAsync(Genre genre, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    // {
+    //     var query = new GetGameByGenreQuery(genre);
+    //     var result = await mediator.Send(query);
+    //     
+    //     if (result.IsSuccess == false)
+    //     {
+    //         return result.ToActionResult(this);
+    //     }
+    //     
+    //     return Ok(result);
+    // }
 
-    [HttpGet("Platform/{platform}")]
-    public async Task<IActionResult> GetByPlatformAsync(Platform platform, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-    {
-        var query = new GetGameByPlatformQuery(platform);
-        var result = await mediator.Send(query);
-        
-        if (result.IsSuccess == false)
-        {
-            return result.ToActionResult(this);
-        }
-        
-        return Ok(result);
-    }
+    // [HttpGet("Platform/{platform}")]
+    // public async Task<IActionResult> GetByPlatformAsync(Platform platform, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    // {
+    //     var query = new GetGameByPlatformQuery(platform);
+    //     var result = await mediator.Send(query);
+    //     
+    //     if (result.IsSuccess == false)
+    //     {
+    //         return result.ToActionResult(this);
+    //     }
+    //     
+    //     return Ok(result);
+    // }
     
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateGameCommand command)
@@ -150,10 +146,11 @@ public class GamesController (IMediator mediator) : ControllerBase
             request.Title,
             request.Description,
             request.DailyRentalPrice,
+            request.PurchasePrice,
             request.ReleaseDate,
             request.AgeRating,
-            request.Genre,
-            request.Platform
+            request.GenreIds,
+            request.PlatformIds
         );
 
         var result = await mediator.Send(command);
@@ -172,24 +169,6 @@ public class GamesController (IMediator mediator) : ControllerBase
     public async Task<IActionResult> DeactivateAsync(Guid id)
     {
         var result = await mediator.Send(new DeactivateGameCommand(id));
-        return result.ToActionResult(this);
-    }
-    
-    [HttpPut("{id:guid}/addstock")]
-    public async Task<IActionResult> AddStockAsync(Guid id, [FromBody] AddStockGameRequest request)
-    {
-        var command = new AddStockGameCommand(id, request.Quantity);
-        var result = await mediator.Send(command);
-        
-        return result.ToActionResult(this);
-    }
-    
-    [HttpPut("{id:guid}/removestock")]
-    public async Task<IActionResult> RemoveStockAsync(Guid id, [FromBody] RemoveStockGameRequest request)
-    {
-        var command = new RemoveStockGameCommand(id, request.Quantity);
-        var result = await mediator.Send(command);
-        
         return result.ToActionResult(this);
     }
 }

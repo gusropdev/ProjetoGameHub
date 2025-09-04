@@ -6,7 +6,11 @@ using MediatR;
 
 namespace GameHub.Application.Features.Games.Commands.UpdateGame;
 
-public class UpdateGameCommandHandler (IGameRepository gameRepository, IValidator<UpdateGameCommand> validator, IUnitOfWork unitOfWork)
+public class UpdateGameCommandHandler (IGameRepository gameRepository,
+    IGenreRepository genreRepository,
+    IPlatformRepository platformRepository,
+    IValidator<UpdateGameCommand> validator,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateGameCommand, Result>
 {
     public async Task<Result> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
@@ -27,13 +31,25 @@ public class UpdateGameCommandHandler (IGameRepository gameRepository, IValidato
             return Result.Failure("Game not found.", ErrorType.NotFound); // Game not found
         }
         
+        var newGenres = await genreRepository.GetByIdsAsync(request.GenreIds, cancellationToken);
+        var newPlatforms = await platformRepository.GetByIdsAsync(request.PlatformIds, cancellationToken);
+        
+        if (newGenres.Count != request.GenreIds.Count)
+        {
+            return Result.Failure("One or more genres not found.", ErrorType.NotFound); // Some genres not found
+        }
+        if (newPlatforms.Count != request.PlatformIds.Count)
+        {
+            return Result.Failure("One or more platforms not found.", ErrorType.NotFound); // Some platforms not found
+        }
+        
         game.UpdateTitle(request.Title);
         game.UpdateDescription(request.Description);
-        game.UpdateGenre(request.Genre);
-        game.UpdatePlatform(request.Platform);
         game.UpdateDailyRentalPrice(request.DailyRentalPrice);
         game.UpdateReleaseDate(request.ReleaseDate);
         game.UpdateAgeRating(request.AgeRating);
+        game.UpdateGenres(newGenres);
+        game.UpdatePlatforms(newPlatforms);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         

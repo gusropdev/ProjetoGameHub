@@ -6,7 +6,8 @@ public record UpdateGameRequest(
     string Title,
     string Description,
     decimal DailyRentalPrice,
+    decimal PurchasePrice,
     DateTime ReleaseDate,
     AgeRating AgeRating,
-    Genre Genre,
-    Platform Platform);
+    List<int> GenreIds,
+    List<int> PlatformIds);

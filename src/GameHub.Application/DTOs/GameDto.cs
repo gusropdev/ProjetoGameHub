@@ -1,3 +1,4 @@
+using GameHub.Domain.Entities;
 using GameHub.Domain.Enums;
 
 namespace GameHub.Application.DTOs;
@@ -8,10 +9,9 @@ public class GameDto
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public decimal DailyRentalPrice { get; set; }
-    public int StockQuantity { get; set; }
+    public decimal PurchasePrice { get; set; }
     public DateTime ReleaseDate { get; set; }
-    
     public AgeRating AgeRating { get; set; }
-    public Genre Genre { get; set; }
-    public Platform Platform { get; set; }
+    public ICollection<GenreDto> Genres { get; set; } = null!;
+    public ICollection<PlatformDto> Platforms { get; set; } = null!;
 }

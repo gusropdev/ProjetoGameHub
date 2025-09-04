@@ -13,11 +13,12 @@ public static class GameMapper
             Title = game.Title,
             Description = game.Description,
             DailyRentalPrice = game.DailyRentalPrice,
-            StockQuantity = game.StockQuantity,
+            PurchasePrice = game.PurchasePrice,
             ReleaseDate = game.ReleaseDate,
             AgeRating = game.AgeRating,
-            Genre = game.Genre,
-            Platform = game.Platform,
+            
+            Genres = game.Genres.Select(genre => genre.MapToDto()).ToList(),
+            Platforms = game.Platforms.Select(platform => platform.MapToDto()).ToList()
         };
     }
 }

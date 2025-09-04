@@ -23,12 +23,12 @@ public class GetGameByGenreQueryHandler (IGameRepository gameRepository, IValida
             return PagedResult<GameDto>.Failure(errorMessages, ErrorType.Validation);
         }
         
-        var games = await gameRepository.GetByGenreAsync(request.Genre, cancellationToken);
+        var games = await gameRepository.GetByGenreAsync(request.GenreId, cancellationToken);
         var totalCount = games.Count;
         
         if (totalCount == 0)
         {
-            return PagedResult<GameDto>.Failure("No games found for the specified age rating.", ErrorType.NotFound);
+            return PagedResult<GameDto>.Failure("No games found for the specified genre.", ErrorType.NotFound);
         }
 
         var pagedGames = games

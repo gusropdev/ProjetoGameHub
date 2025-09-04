@@ -1,4 +1,3 @@
-using GameHub.Application.Common;
 using GameHub.Application.Common.Responses;
 using GameHub.Domain.Enums;
 using MediatR;
@@ -9,9 +8,9 @@ public record CreateGameCommand (
     string Title,
     string Description,
     decimal DailyRentalPrice,
-    int StockQuantity,
+    decimal PurchasePrice,
     DateTime ReleaseDate,
     AgeRating AgeRating,
-    Genre Genre,
-    Platform Platform
+    List<int> GenreIds,
+    List<int> PlatformIds
     ): IRequest<Result<Guid>>;

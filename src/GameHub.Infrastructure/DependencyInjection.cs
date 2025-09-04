@@ -19,6 +19,8 @@ public static class DependencyInjection
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IGenreRepository, GenreRepository>();
+        services.AddScoped<IPlatformRepository, PlatformRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;

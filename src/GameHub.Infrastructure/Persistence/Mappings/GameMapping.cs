@@ -35,15 +35,12 @@ public class GameMapping : IEntityTypeConfiguration<Game>
             .HasPrecision(19, 4)
             .HasColumnType("SMALLMONEY");
 
+        builder.Property(g => g.PurchasePrice)
+            .IsRequired()
+            .HasPrecision(19, 4)
+            .HasColumnType("SMALLMONEY");
+
         builder.Property(g => g.AgeRating)
-            .IsRequired()
-            .HasConversion<string>();
-        
-        builder.Property(g => g.Platform)
-            .IsRequired()
-            .HasConversion<string>();
-        
-        builder.Property(g => g.Genre)
             .IsRequired()
             .HasConversion<string>();
     }

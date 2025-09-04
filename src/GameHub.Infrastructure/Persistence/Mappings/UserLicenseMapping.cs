@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameHub.Infrastructure.Persistence.Mappings;
 
-public class RentalMapping : IEntityTypeConfiguration<Rental>
+public class RentalMapping : IEntityTypeConfiguration<UserLicense>
 {
-    public void Configure(EntityTypeBuilder<Rental> builder)
+    public void Configure(EntityTypeBuilder<UserLicense> builder)
     {
         builder.ToTable("Rentals");
 
@@ -35,7 +35,7 @@ public class RentalMapping : IEntityTypeConfiguration<Rental>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(r => r.Game)
-            .WithMany(g => g.Rentals)
+            .WithMany(g => g.UserLicenses)
             .HasForeignKey(r => r.GameId)
             .OnDelete(DeleteBehavior.Restrict);
     }

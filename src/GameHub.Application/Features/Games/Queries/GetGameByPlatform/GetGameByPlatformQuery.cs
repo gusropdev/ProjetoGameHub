@@ -5,4 +5,4 @@ using MediatR;
 
 namespace GameHub.Application.Features.Games.Queries.GetGameByPlatform;
 
-public record GetGameByPlatformQuery (Platform Platform, int PageNumber = 1, int PageSize = 10) : IRequest<PagedResult<GameDto>>;
+public record GetGameByPlatformQuery (int PlatformId, int PageNumber = 1, int PageSize = 10) : IRequest<PagedResult<GameDto>>;
